@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Cost Calculator | Estimate Your Trip Expenses</title>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .calculator-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 128, 0, 0.2);
+            width: 380px;
+            text-align: center;
+            border-top: 5px solid #2e7d32;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 26px;
+            color: #1b5e20;
+        }
+
+        .subtitle {
+            margin-bottom: 20px;
+            color: #388e3c;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 2px solid #81c784;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #43a047;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #388e3c;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #c8e6c9;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #2e7d32;
+            text-align: left;
+            border-left: 4px solid #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="container">
+            <h1>🚗 Fuel Cost Calculator</h1>
+            <p class="subtitle">Calculate your travel expenses based on distance, efficiency, and fuel price</p>
+            
+            <form id="fuelCalculatorForm">
+                <div class="input-group">
+                    <label for="distance">Distance (km):</label>
+                    <input type="number" id="distance" placeholder="Enter distance in kilometers" required step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="efficiency">Fuel Efficiency (km/l):</label>
+                    <input type="number" id="efficiency" placeholder="Enter km per liter" required step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="price">Fuel Price (₹/l):</label>
+                    <input type="number" id="price" placeholder="Enter price per liter" required step="0.01">
+                </div>
+                
+                <button type="button" onclick="calculateFuelCost()">Calculate Cost</button>
+            </form>
+            
+            <div id="result" class="result"></div>
+        </div>
+    
+        <div class="container">
+            <h1>⚡ Electric Vehicle Cost Calculator</h1>
+            <p class="subtitle">Estimate your trip expenses for EVs based on distance, vehicle range, and electricity rate</p>
+            
+            <form id="evCalculatorForm">
+                <div class="input-group">
+                    <label for="evDistance">Distance (km):</label>
+                    <input type="number" id="evDistance" placeholder="Enter distance in kilometers" required step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="evRange">Vehicle Range (km per full charge):</label>
+                    <input type="number" id="evRange" placeholder="Enter total range per charge" required step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="evBattery">Battery Capacity (kWh):</label>
+                    <input type="number" id="evBattery" placeholder="Enter battery capacity" required step="0.1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="evPrice">Electricity Price (₹/kWh):</label>
+                    <input type="number" id="evPrice" placeholder="Enter price per kWh" required step="0.01">
+                </div>
+                
+                <button type="button" onclick="calculateEvCost()">Calculate Cost</button>
+            </form>
+            
+            <div id="evResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculateFuelCost() {
+            const distance = parseFloat(document.getElementById('distance').value);
+            const efficiency = parseFloat(document.getElementById('efficiency').value);
+            const price = parseFloat(document.getElementById('price').value);
+
+            if (isNaN(distance) || isNaN(efficiency) || isNaN(price)) {
+                alert("Please fill all fields with valid numbers!");
+                return;
+            }
+
+            const fuelRequired = distance / efficiency;
+            const totalCost = fuelRequired * price;
+
+            document.getElementById('result').innerHTML = `
+                <strong>Calculation Results:</strong><br><br>
+                📏 Distance: ${distance.toFixed(1)} km<br>
+                ⛽ Fuel Required: ${fuelRequired.toFixed(2)} liters<br>
+                💵 Total Cost: ₹${totalCost.toFixed(2)}<br>
+            `;
+        }
+
+        function calculateEvCost() {
+            const evDistance = parseFloat(document.getElementById('evDistance').value);
+            const evRange = parseFloat(document.getElementById('evRange').value);
+            const evBattery = parseFloat(document.getElementById('evBattery').value);
+            const evPrice = parseFloat(document.getElementById('evPrice').value);
+
+            if (isNaN(evDistance) || isNaN(evRange) || isNaN(evBattery) || isNaN(evPrice)) {
+                alert("Please fill all fields with valid numbers!");
+                return;
+            }
+
+            const energyRequired = (evDistance / evRange) * evBattery;
+            const totalEvCost = energyRequired * evPrice;
+
+            document.getElementById('evResult').innerHTML = `
+                <strong>Calculation Results:</strong><br><br>
+                📏 Distance: ${evDistance.toFixed(1)} km<br>
+                🔋 Energy Required: ${energyRequired.toFixed(2)} kWh<br>
+                💵 Total Cost: ₹${totalEvCost.toFixed(2)}<br>
+            `;
+        }
+    </script>
+</body>
+</html>
